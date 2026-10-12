@@ -1,107 +1,101 @@
-# 2.7.0
+# Changelog
 
-- Su Android 12+, riproduzione interamente residente: eliminata la richiesta asincrona del fotogramma che poteva mostrare il caricamento trasparente al ritorno sulla Home, anche senza il vecchio aggiornamento superfluo della cache.
-- Android 12/12L: un solo ViewFlipper con figli stabili; Android 13+: RemoteCollectionItems nativi. Layout distinti per rimuovere il lettore precedente all'aggiornamento.
-- Percorso casuale chiuso con una vera passeggiata di ritorno, conservando ciclo idle → camminata → idle → attività, direzione delle pose e note. Nessuna dissolvenza del personaggio.
-- La sequenza finita si ripete e cambia ogni giorno. La durata dipende dalle varianti dimensionali e dal ritmo; non tutte le attività devono comparire in ogni singola sequenza.
-- Budget complessivo di 1600 fotogrammi, varianti responsive limitate e fallback per orientamento; verifica del Parcel sotto 800 KiB. Android 12 evita i metadati ripetuti della collezione e non misura i figli nascosti.
-- Blocco tocchi e riapplicazioni conservano il fotogramma corrente. Android 8–11 mantiene il servizio e i checkpoint precedenti.
-- Nuove regressioni sulle API 31 e 35: ritorni da pagina nascosta, schermo spento simulato tramite visibilità, ripetizione completa, risposta immediata senza servizio, payload, riapplicazione e tocchi su Android 12. Controllo che riproduce il vuoto nel lettore precedente senza invalidazione programmata dall'app.
-- VersionCode 10; stesso pacchetto e certificato per aggiornare la 2.6.
+## 2.7.0
 
-Limiti e risultati automatici in `VERIFICA.md`. Non provato sul launcher Samsung fisico.
+- On Android 12+, playback is fully resident. Removed the asynchronous frame request that could show a transparent loading view when returning to the home screen, even without the unnecessary cache update fixed earlier.
+- Android 12/12L uses one ViewFlipper with stable children; Android 13+ uses native RemoteCollectionItems. Separate layouts replace the previous player during upgrade.
+- Random routes close with an actual return walk, preserving idle → walk → idle → activity, facing direction, and musical notes. The character never crossfades.
+- The finite sequence repeats and changes daily. Duration depends on size variants and speed; not every activity appears in each sequence.
+- A total budget of 1600 frames, bounded responsive variants, and orientation fallback keep the complete Parcel below the tested 800 KiB threshold. Android 12 avoids repeated collection metadata and does not measure hidden children.
+- Touch locking and view reapplication preserve the current frame. Android 8–11 retains the previous service and checkpoints.
+- Added regressions on API levels 31 and 35 for returning from hidden pages, simulated screen-off visibility, a complete loop, immediate frame availability, payload limits, reapplication, and Android 12 touch events. A control reproduces an empty frame in the previous player without an app-scheduled invalidation.
+- Version code 10; the same package and certificate allow upgrading from 2.6.
 
-# 2.6.0
+Results and limitations are documented in [VERIFICATION.md](VERIFICATION.md). Not tested on a physical Samsung launcher.
 
-- Aggiunto il toggle **Blocca tocchi sul widget** vicino ai pulsanti principali, con preferenza persistente e aggiornamento immediato di tutti i widget inseriti.
-- Il blocco impedisce l’apertura dell’app sia toccando Mozart sia toccando l’area del widget, anche quando è in pausa. Le impostazioni restano accessibili dall’icona dell’app.
-- Azioni dei tocchi aggiornate anche su viste e fotogrammi già caricati; adapter, posizione e sequenza restano gli stessi durante blocco e sblocco.
-- Evento senza azioni per i tocchi della collezione bloccata, compatibile con i vecchi handler Android che non gestiscono un template nullo.
-- Sei nuovi casi Robolectric sulle API 26 e 35: tocco sullo sfondo, fotogrammi già caricati e successivi, blocco/sblocco, widget in pausa, persistenza e due widget aggiornati dal toggle reale.
-- VersionCode 9, stesso pacchetto e certificato per l’aggiornamento. Sequenza e checkpoint compatibili con 2.4 e 2.5.
+## 2.6.0
 
-Verifica automatica e limiti della prova sul telefono in `VERIFICA.md`.
+- Added a touch-lock toggle near the main controls, with a persistent setting and immediate updates to every placed widget.
+- Locked taps on Mozart or the widget area do not open the app, including when playback is paused. Settings remain accessible from the app icon.
+- Updated touch actions for existing views, cached frames, and upcoming frames while preserving the adapter, position, and sequence.
+- Added a no-op collection touch event compatible with older Android handlers that cannot use a null template.
+- Six new Robolectric cases on API levels 26 and 35 cover background taps, cached and upcoming frames, lock/unlock, paused widgets, persistence, and two widgets updated through the actual toggle.
+- Version code 9; unchanged package and signing certificate. Sequences and checkpoints remain compatible with 2.4 and 2.5.
 
-# 2.5.0
+## 2.5.0
 
-- Corretto un aggiornamento superfluo della collezione dopo la ricreazione del servizio: poteva eliminare il prossimo fotogramma già precaricato e mostrare il caricamento trasparente alla riaccensione dello schermo.
-- Avvio del precaricamento limitato ai primi cinque fotogrammi; una richiesta di un indice avanzato annulla l’aggiornamento, anche se era stato programmato da una richiesta iniziale dell’indice zero.
-- Annullamento definitivo del callback alla distruzione della factory, con sincronizzazione fra caricamento e callback.
-- Dieci nuovi casi Robolectric sulle API 26 e 35: cache e flipper reali, servizio ricreato, ripristino dopo indice zero, avvio iniziale a entrambi i ritmi, distruzione e controllo del fotogramma trasparente dopo invalidazione. Quattro regressioni fallivano prima della correzione.
-- Identità della sequenza e checkpoint compatibili con la 2.4: ciclo, pose, respirazione, violino, specchio e note conservati.
-- VersionCode 8, stesso pacchetto e certificato per l’aggiornamento.
+- Fixed an unnecessary collection refresh after service recreation that could discard a prefetched frame and display transparent loading when the screen woke.
+- Limited startup warmup to the first five frames. Requesting a later frame cancels the refresh, even if frame zero had already scheduled it.
+- Factory destruction permanently cancels its pending callback; loading and callback access are synchronized.
+- Ten new Robolectric cases on API levels 26 and 35 cover the real cache/flipper, service recreation, restoration after frame zero, both startup frame rates, destruction, and an empty-frame control after invalidation. Four regressions failed before the fix.
+- Sequence identity and checkpoints remain compatible with 2.4, preserving the cycle, poses, breathing, violin repair, mirroring, and notes.
+- Version code 8; unchanged package and signing certificate.
 
-La scomparsa è riprodotta simulando la ricreazione del servizio e l’invalidazione della cache nel framework Android; la verifica sul launcher Samsung fisico resta da eseguire. Dettagli in `VERIFICA.md`.
+The disappearance was reproduced through simulated service recreation and Android cache invalidation. Physical Samsung launcher testing remained outstanding.
 
-# 2.4.0
+## 2.4.0
 
-- Idle con respirazione: busto e parte superiore salgono e scendono di pochi pixel in un ciclo di due secondi; piedi fermi.
-- Fotogrammi ottenuti con un rig dei pixel originali, mantenendo stile e proporzioni del personaggio.
-- Rimosso il frammento isolato fuori dal violino nei fotogrammi 1 e 3, applicando soltanto la zona trasparente della correzione generata. Personaggio e strumento mantengono tutti i loro pixel originali.
-- Verifiche su piedi invariati, movimento del busto, assenza di frammenti scollegati in tutti i fotogrammi del violino e riparazione limitata al difetto.
-- Conservati ciclo idle → passeggiata → idle → attività, cambi immediati, specchio di tutte le pose, notine e continuità nel widget 3×1.
-- VersionCode 7, stesso pacchetto e certificato per l’aggiornamento.
+- Added a two-second idle breathing cycle: the upper body rises and falls a few pixels while the feet stay fixed.
+- Built frames by rigging original pixels, preserving character style and proportions.
+- Removed the isolated violin fragment in frames 1 and 3 using only the transparent area of the generated repair. Character and instrument pixels remain unchanged.
+- Verified fixed feet, actual torso motion, absence of disconnected fragments, and changes restricted to the defect.
+- Preserved idle → walk → idle → activity, immediate transitions, mirrored poses, musical notes, and continuity in a 3×1 widget.
+- Version code 7; unchanged package and signing certificate.
 
-Verifica automatica e limiti della prova sul telefono in `VERIFICA.md`.
+## 2.3.0
 
-# 2.3.0
+- Removed crossfades between animations; every pose remains fully opaque.
+- Enforced idle → walk to a random destination → idle → random activity → idle, then repeat.
+- Walking reaches its destination before resting, with continuity across widget batches.
+- All poses and props remain mirrored after walking left until a later walk changes direction. Mirroring preserves the cell's position.
+- Birthday events and preview selections follow the same cycle. Rapid taps replace the queued activity.
+- Walking animates steps in place when the character completely fills the widget.
+- Preserved all 26 activities, musical notes, checkpoints, and fixes for jumps in 3×1 widgets.
+- Version code 6; unchanged package and signing certificate.
 
-- Eliminate le dissolvenze tra le animazioni; ogni posa resta opaca.
-- Ciclo obbligatorio: idle, passeggiata verso un punto casuale, idle, attività casuale, ritorno all’idle e ripartenza.
-- Destinazione raggiunta prima del riposo, con continuità fra i blocchi del widget.
-- Tutte le pose e i loro oggetti si specchiano dopo una passeggiata verso sinistra, fino alla camminata successiva; lo specchio mantiene la cella nella stessa posizione.
-- Anche compleanno e scelte nell’anteprima rispettano il ciclo. I tocchi rapidi aggiornano il gesto in attesa.
-- Nelle aree completamente occupate dal personaggio, la fase di camminata anima i passi sul posto.
-- Conservate le 26 attività, le notine musicali, i checkpoint e le correzioni contro i teletrasporti nei widget 3×1.
-- VersionCode 6, stesso pacchetto e certificato per l’aggiornamento.
+## 2.2.0
 
-Verifica automatica e limiti della prova sul telefono in `VERIFICA.md`.
+- Added 20 original animation sets and 80 frames generated from the Mozart reference, for 26 activities in total.
+- Added violin, conducting, flute, quill writing, humming, tea, reading, a letter, a watch, wig adjustment, a minuet, stretching, yawning, napping, waving, a tricorn hat, a rose, a music box, travel, and applause.
+- New sets play forward and backward, with registered sprite cells, aligned feet, and transparent margins.
+- Introduced half-second entry/exit transitions and a visible idle between activities, including birthdays and manual selections. These transitions were later removed in 2.3.
+- Added occasional musical notes, sometimes paired, rising and fading inside the character's bounds.
+- Added all 26 preview controls; selecting an activity returns to the visible scene, and rapid taps replace the queued choice.
+- Preserved immutable frames, stable adapters, checkpoints, and the 3×1 jump fixes.
+- Version code 5; unchanged package and signing certificate.
 
-# 2.2.0
+## 2.1.0
 
-- Aggiunti 20 set originali di animazione, con 80 fotogrammi generati sul riferimento Mozart: 26 attività complessive.
-- Violino, direzione d’orchestra, flauto, penna e canticchiare; tè, libro, lettera, orologio e parrucca; minuetto, stiracchiarsi, sbadiglio, sonnellino e saluto; tricorno, rosa, carillon, viaggio e applauso.
-- Nuove animazioni in sequenza avanti/indietro e sprite registrati sulla stessa cella, con piedi allineati e margini trasparenti.
-- Passaggi di mezzo secondo in entrata e uscita e idle visibile fra tutte le attività, compresi compleanno e selezione manuale.
-- Notine musicali occasionali, anche in coppia, con salita e dissolvenza dentro i confini del personaggio.
-- Anteprima con tutti i 26 pulsanti: scegliere un’attività riporta alla scena visibile; i tocchi ravvicinati aggiornano la scelta in attesa.
-- Conservati fotogrammi immutabili, adapter stabile, checkpoint e correzioni contro i salti nel widget 3×1.
-- VersionCode 5, stessa firma e pacchetto per aggiornare la versione precedente.
+- Fixed position jumps in wide, short widgets, including 3×1 layouts.
+- Removed the fixed, centered pose from the temporary loading view.
+- Made numbered frames immutable: prefetch and out-of-order requests cannot rewrite the sequence already playing.
+- Preserved widget seeds and adapter identity during ordinary updates.
+- Added bounded caching and checkpoints to reconstruct the same route after service recreation.
+- Preserved Android's native timer, transparency, eight walking poses, and the absence of overlay/accessibility permissions.
+- Passed 42 tests. Six jump regressions that failed in 2.0 passed in 2.1.
 
-Verifica automatica e limiti del controllo sul telefono in `VERIFICA.md`.
+Physical Samsung launcher testing remained outstanding.
 
-# 2.1.0
+## 2.0.0
 
-- Corretti i salti di posizione nei widget larghi e bassi, inclusa l’area 3×1.
-- Rimossa la posa fissa al centro dalla vista temporanea di caricamento.
-- Fotogrammi numerati e immutabili: le richieste anticipate o fuori ordine non cambiano la sequenza in riproduzione.
-- Seme e identità dell’adapter conservati durante gli aggiornamenti ordinari del widget.
-- Cache limitata e checkpoint per ricostruire la stessa passeggiata dopo la ricreazione del servizio.
-- Conservati il timer nativo Android, lo sfondo trasparente, gli otto passi e l’assenza di permessi overlay/accessibilità.
-- 42 test superati; le sei regressioni sui salti fallivano nella 2.0 e passano nella 2.1.
+- Replaced the overlay with a native, transparent widget drawn by the launcher inside its own area.
+- Removed the overlay, accessibility service, foreground service, and all requested permissions.
+- Prepared random sequences in batches of roughly 45 seconds, continuing the engine state and making new choices for later batches.
+- Added native playback at approximately 8 or 12 frames per second, with nearby frame prefetch and immediate transitions.
+- Preserved eight walking poses, other activities, and special dates, using 36 transparent native resources.
+- Added responsive variants for launcher-provided sizes without mandatory configuration.
+- Migrated earlier versions while retaining the same package and certificate.
 
-La verifica sul launcher Samsung reale resta da eseguire con l’APK aggiornato. Dettagli in `VERIFICA.md`.
+Smoothness and Samsung service binding remained to be checked on a physical phone.
 
-# 2.0.0
+## 1.1.0
 
-- Widget nativo trasparente: Mozart viene riprodotto dal launcher dentro la propria area.
-- Rimossi overlay, servizio di accessibilità, servizio in primo piano e tutti i permessi richiesti.
-- Sequenze casuali preparate in blocchi di circa 45 secondi, con continuità dello stato e nuove scelte al blocco successivo.
-- Riproduzione nativa a circa 8 o 12 fotogrammi/s, con precaricamento dei fotogrammi vicini e transizioni immediate.
-- Conservate le otto pose della passeggiata, le altre attività e le date speciali; 36 risorse trasparenti native.
-- Varianti responsive per le dimensioni comunicate dal launcher, senza configurazioni obbligatorie.
-- Migrazione dalle versioni precedenti e stesso pacchetto/certificato per l’aggiornamento.
+- Regenerated walking with eight poses: alternating legs, bent knees, lifted feet, and ground contact. Steps follow distance, speed, and character size.
+- Added a single home screen placement action, starting the service from the visible app and returning home after placement. Removed mandatory widget configuration.
+- Added a default 2×2 widget, resizable in both directions down to a launcher cell, with the actual character in its preview.
+- Removed the manual area editor and saved overrides from 1.0. Position and size follow the widget.
+- Batched movement/resize events without repeatedly postponing scans.
+- Canceling placement with no widgets present stops the prepared service.
+- Passed 20 tests, completed build and lint, and retained the 1.0 signing certificate.
 
-La fluidità e il collegamento del servizio nel launcher Samsung restano da verificare sul telefono. Dettagli in `VERIFICA.md`.
-
-# 1.1.0
-
-- Camminata rigenerata in otto pose: gambe alternate, ginocchia piegate, piedi sollevati e appoggio a terra. La sequenza segue la distanza percorsa, il ritmo e la dimensione del personaggio.
-- Un solo comando di aggiunta alla Home, con avvio del servizio dall’app visibile e ritorno alla Home dopo l’inserimento. Rimossa la configurazione obbligatoria del widget.
-- Widget iniziale 2×2, ridimensionabile in entrambe le direzioni fino ai limiti di una cella del launcher. Anteprima con il personaggio reale.
-- Rimossi editor e override dell’area manuale, compresi quelli salvati dalla 1.0. Posizione e dimensioni seguono esclusivamente il widget.
-- Eventi di movimento/ridimensionamento raggruppati senza rinviare continuamente la scansione.
-- Annullare l’aggiunta senza alcun widget interrompe il servizio predisposto per l’inserimento.
-- 20 test superati, compilazione e lint completati. Firma uguale alla 1.0.
-
-Il launcher controlla la griglia e quando mostrare le maniglie del widget. La nuova procedura Samsung va verificata sul telefono; i test Android sono eseguiti con Robolectric sulle API 26 e 35.
+The launcher controls grid sizes and resize-handle visibility. The Samsung placement flow required physical testing; Android tests used Robolectric on API levels 26 and 35.
