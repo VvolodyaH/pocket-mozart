@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="it">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pocket Mozart · anteprima animata</title>
+<style>
+:root{color-scheme:light;--red:#ae373c;--ink:#302b36;--muted:#847d83}
+*{box-sizing:border-box}body{margin:0;background:#f8f4ef;color:var(--ink);font:15px/1.55 system-ui,sans-serif}
+main{max-width:670px;margin:40px auto;padding:0 22px 36px}header{display:flex;align-items:center;gap:14px}header span{color:var(--red);font-size:32px}header b{font:700 23px Georgia,serif}
+.eyebrow{color:var(--muted);font-size:10px;letter-spacing:2px;margin-top:28px}h1{font:38px/1.16 Georgia,serif;margin:12px 0}p{color:var(--muted)}
+.card{background:#fffcf8;border:1px solid #e6ded5;border-radius:22px;padding:20px;margin-top:22px}
+.stage{background:linear-gradient(145deg,#eee4d8,#f3e1e1,#e9dfdb);border-radius:18px;padding:20px;display:flex;justify-content:center;align-items:center;min-height:295px;overflow:auto}
+.area{width:360px;height:245px;min-width:40px;min-height:40px;max-width:100%;resize:both;overflow:hidden;position:relative;border:1px dashed #ab7779;border-radius:12px}
+canvas{width:100%;height:100%;display:block;image-rendering:pixelated}.hint{font-size:12px;text-align:center;margin:12px 0 0}.buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
+button{font:inherit;font-size:12px;background:#f2e7e3;color:var(--red);border:0;border-radius:12px;padding:13px 7px;cursor:pointer}button[aria-pressed=true]{background:var(--red);color:white}button:focus-visible,input:focus-visible{outline:3px solid #b78053;outline-offset:3px}
+.control{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:17px 0 4px}.control label{font-size:13px}.control input[type=range]{accent-color:var(--red);width:160px;max-width:50%}.control input[type=checkbox]{accent-color:var(--red);width:18px;height:18px}.note{font-size:12px;margin-top:22px}.footer{font-size:11px;text-align:center;margin-top:24px;color:var(--muted)}
+@media(max-width:420px){main{margin-top:20px}.card{padding:14px}h1{font-size:33px}.stage{padding:10px}.area{width:270px;height:235px}}
+@media(prefers-reduced-motion:reduce){.stage{background:#eee4d8}}
+</style>
+<main>
+<header><span aria-hidden="true">♫</span><b>pocket mozart</b></header>
+<div class="eyebrow">ANTEPRIMA DELLE ANIMAZIONI</div>
+<h1>Un piccolo maestro.<br>Una vita tutta sua.</h1>
+<p>26 attività e notine musicali. In pausa respira con il busto che sale e scende e i piedi fermi. Scegli un’animazione o lascia che Mozart ti sorprenda.</p>
+<section class="card">
+<div class="stage"><div class="area" id="area"><canvas id="canvas" aria-label="Mozart animato su sfondo trasparente"></canvas></div></div>
+<p class="hint">Trascina l’angolo in basso a destra per adattare il suo spazio.</p>
+<div class="buttons" id="buttons"></div>
+<div class="control"><label for="auto">Movimento autonomo</label><input id="auto" type="checkbox" checked></div>
+<div class="control"><label for="size">Dimensione di Mozart</label><input id="size" type="range" min="64" max="160" value="115"></div>
+<div class="control"><label for="tempo">Il suo ritmo</label><select id="tempo"><option value="0.65">Tranquillo</option><option value="1" selected>Naturale</option><option value="1.5">Vivace</option></select></div>
+<div class="control"><label for="party">Simula il 27 gennaio</label><input id="party" type="checkbox"></div>
+</section>
+<p class="note">Nell’app premi “Aggiungi Mozart alla Home”. Lo spazio si regola con i bordi del widget direttamente nel launcher. La versione 2.4 segue il ciclo riposo → passeggiata → riposo → attività casuale. I cambi sono immediati e tutte le pose si specchiano quando Mozart va a sinistra. Qui puoi provare gli stessi sprite inclusi nell’APK; il lettore del widget va provato su Android.</p>
+<div class="footer">Fatto di pixel, musica e piccole pause.</div>
+</main>
+<script>
+const atlas=new Image(),walk=new Image(),extra=new Image();
+atlas.src='data:image/png;base64,__ATLAS_BASE64__';walk.src='data:image/png;base64,__WALK_BASE64__';extra.src='data:image/png;base64,__EXTRA_BASE64__';
+const notes=__NOTE_DATA__;
+notes.forEach(n=>n.paths.forEach(p=>p.path=new Path2D(p.d)));
+const canvas=document.querySelector('#canvas'),ctx=canvas.getContext('2d'),area=document.querySelector('#area');
+const auto=document.querySelector('#auto'),party=document.querySelector('#party'),sizeControl=document.querySelector('#size');
+const labels=['Riposo','Passeggiata','Spartito','Pianoforte','Inchino','Compleanno','Violino','Direttore','Flauto','Composizione','Canticchia','Un tè','Lettura','Lettera','Orologio','Parrucca','Minuetto','Si stiracchia','Sbadiglio','Sonnellino','Saluto','Tricorno','Una rosa','Carillon','In viaggio','Applauso'];
+const fps=[2,8,3,5,2.5,4,5,4,4,3.5,3,2.5,2,2.5,2.5,3,5,2.5,2,1.5,4,3,2.5,4,3,5];
+let w=1,h=1,s=1,x=0,y=0,tx=0,ty=0,row=0,t=0,remaining=3,last=0,initialized=false,left=false,partyIn=0,walkPhase=0;
+let phase=0,queued=-1,walkRequested=false,idlePreview=0,inPlace=false,noteAge=-1,noteDelay=5,noteKind=0,noteLeft=false;
+function resize(){w=area.clientWidth;h=area.clientHeight;canvas.width=w;canvas.height=h;ctx.imageSmoothingEnabled=false;s=Math.max(1,Math.min(Number(sizeControl.value)*1.23,w-8,h-8));if(!initialized){x=(w-s)/2;y=(h-s)/2;initialized=true}x=Math.max(4,Math.min(x,w-s-4));y=Math.max(4,Math.min(y,h-s-4));tx=Math.max(4,Math.min(tx,w-s-4));ty=Math.max(4,Math.min(ty,h-s-4))}
+function setPose(r,seconds){row=r;t=0;walkPhase=0;remaining=seconds;document.querySelectorAll('.buttons button').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===r)))}
+function rest(next,seconds){phase=next;setPose(0,Math.max(seconds,idlePreview));idlePreview=0}
+function startWalk(){
+ const mx=Math.max(0,w-s-8),my=Math.max(0,h-s-8);inPlace=mx+my<.5;walkRequested=false;
+ if(inPlace){tx=x;ty=y;phase=1;setPose(1,1.2);return}
+ const farthest=Math.hypot(Math.max(x-4,mx-x+4),Math.max(y-4,my-y+4)),minimum=Math.min(s*.25,farthest*.5);
+ for(let i=0;i<12;i++){tx=4+Math.random()*mx;ty=4+Math.random()*my;if(Math.hypot(tx-x,ty-y)>=minimum)break}
+ if(Math.hypot(tx-x,ty-y)<minimum){tx=x-4<mx/2?mx+4:4;ty=y-4<my/2?my+4:4}
+ if(Math.abs(tx-x)>.0001)left=tx<x;phase=1;setPose(1,Math.hypot(tx-x,ty-y)/(30*Number(document.querySelector('#tempo').value))+.5);
+}
+function startAction(){phase=3;if(queued>=2){const next=queued;queued=-1;setPose(next,7);return}if(party.checked&&partyIn<=0){setPose(5,7);partyIn=38;return}const i=Math.floor(Math.random()*23);setPose(i<3?i+2:i+3,4+Math.random()*4)}
+function request(r){if(r===0){if(row===0)remaining=Math.max(remaining,7);else idlePreview=7;return}if(r===1){queued=-1;walkRequested=true;if(phase===0)remaining=Math.min(remaining,.65);return}queued=r;if(row===0)remaining=Math.min(remaining,.65)}
+function sprite(){if(row===1)return Math.min(7,Math.floor(walkPhase*8));if(row===0)return Math.floor(t*fps[0])%4;const tick=Math.floor(t*fps[row]);if(row>=6){const p=tick%6;return p<4?p:6-p}return tick%4}
+labels.forEach((label,i)=>{const b=document.createElement('button');b.textContent=label;b.setAttribute('aria-pressed',String(i===0));b.onclick=()=>{auto.checked=false;request(i)};document.querySelector('#buttons').append(b)});
+new ResizeObserver(resize).observe(area);sizeControl.addEventListener('input',resize);auto.onchange=()=>{if(auto.checked&&phase===0)remaining=Math.min(remaining,.65)};party.onchange=()=>{auto.checked=true;partyIn=0};
+function drawSprite(r,frame){const sheet=r===1?walk:r>=6?extra:atlas;if(!sheet.complete||!sheet.naturalWidth)return;const sourceRow=r===1?Math.floor(frame/4):r>=6?r-6:r;ctx.save();ctx.globalAlpha=1;ctx.translate(Math.round(x),Math.round(y));if(left){ctx.translate(s,0);ctx.scale(-1,1)}ctx.drawImage(sheet,(frame%4)*256,sourceRow*256,256,256,0,0,s,s);ctx.restore()}
+function tick(dt){
+ partyIn-=dt;noteDelay-=dt;
+ if(noteAge>=0){noteAge+=dt;if(noteAge>=2.4)noteAge=-1}
+ if(noteAge<0&&noteDelay<=0&&[0,2,3,5,6,7,8,9,10,16,23,25].includes(row)){noteAge=0;noteKind=Math.floor(Math.random()*3);noteLeft=Math.random()<.5;noteDelay=8+Math.random()*12}
+ t+=dt;remaining-=dt;
+ if(phase===1){if(inPlace)walkPhase=(walkPhase+dt)%1;else{const dx=tx-x,dy=ty-y,d=Math.hypot(dx,dy);if(d<=.0001){if(t>=.35)remaining=0;else walkPhase=(walkPhase+dt)%1}else{const step=Math.min(d,30*Number(document.querySelector('#tempo').value)*dt);x+=dx/d*step;y+=dy/d*step;walkPhase=(walkPhase+step/Math.max(1,s*.30))%1;if(step>=d){x=tx;y=ty;if(t>=.35)remaining=0}}}}
+ if(remaining<=0){if(phase===0){if(auto.checked||queued>=2||walkRequested)startWalk()}else if(phase===1)rest(2,1+Math.random()*1.3);else if(phase===2)startAction();else rest(0,1.8+Math.random()*1.8)}
+}
+function draw(now){
+ requestAnimationFrame(draw);if(document.hidden){last=0;return}if(now-last<40)return;
+ const dt=last?Math.min(.12,(now-last)/1000):0;last=now;tick(dt);
+ ctx.clearRect(0,0,w,h);drawSprite(row,sprite());
+ if(noteAge>=0){const p=noteAge/2.4,n=notes[noteKind],size=s*.19;ctx.save();ctx.globalAlpha=Math.min(1,p/.15,(1-p)/.3);ctx.translate(Math.round(x+s*(noteLeft!==left?.01:.80)+(size-size*n.width/n.height)/2),Math.round(y+s*(.52-.35*p)));ctx.scale(size/n.height,size/n.height);n.paths.forEach(path=>{ctx.fillStyle=path.color;ctx.fill(path.path)});ctx.restore()}
+}
+requestAnimationFrame(draw);
+</script>
+</html>

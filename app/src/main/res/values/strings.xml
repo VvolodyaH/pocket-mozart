@@ -1,0 +1,6 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="it">
+    <string name="app_name">Pocket Mozart</string>
+    <string name="widget_label">Area di movimento di Mozart</string>
+    <string name="widget_description">Mozart animato su sfondo trasparente. Trascina i bordi sulla Home: lo spazio si adatta subito.</string>
+    <string name="size_label">Dimensione di Mozart · %1$d dp</string>
+</resources>

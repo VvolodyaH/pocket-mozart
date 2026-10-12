@@ -1,0 +1,17 @@
+.gradle/
+build/
+app/build/
+local.properties
+*.jks
+*.keystore
+.idea/
+
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.class
+__pycache__/
+.DS_Store

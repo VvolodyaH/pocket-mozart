@@ -1,0 +1,6 @@
+[
+  {"file":"mozart-music-generated.png","bands":[[26,294],[325,594],[624,897],[927,1200],[1229,1499]],"poses":["violin","conduct","flute","quill","hum"]},
+  {"file":"mozart-study-generated.png","bands":[[10,286],[299,575],[587,868],[879,1178],[1188,1466]],"poses":["tea","book","letter","watch","wig"]},
+  {"file":"mozart-rest-generated.png","bands":[[24,290],[325,592],[622,893],[922,1190],[1220,1489]],"poses":["dance","stretch","yawn","nap","wave"]},
+  {"file":"mozart-stage-generated.png","bands":[[34,300],[330,594],[620,883],[904,1183],[1204,1475]],"poses":["tricorn","rose","music_box","travel","applause"]}
+]
