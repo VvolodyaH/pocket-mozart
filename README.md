@@ -2,7 +2,7 @@
 
 Little Mozart companion for android
 
-[Scarica l’APK 2.7](https://github.com/VvolodyaH/pocket-mozart/releases/download/v2.7.0/Pocket-Mozart-2.7.apk) · [Sorgenti completi in ZIP](https://github.com/VvolodyaH/pocket-mozart/releases/download/v2.7.0/Pocket-Mozart-2.7-sorgenti.zip) · [Release e verifiche](https://github.com/VvolodyaH/pocket-mozart/releases/tag/v2.7.0)
+[Scarica l’APK 2.7](https://github.com/VvolodyaH/pocket-mozart/raw/refs/heads/main/downloads/Pocket-Mozart-2.7.apk) · [Sorgenti completi in ZIP](https://github.com/VvolodyaH/pocket-mozart/raw/refs/heads/main/downloads/Pocket-Mozart-2.7-sorgenti.zip) · [Release e verifiche](https://github.com/VvolodyaH/pocket-mozart/releases/tag/v2.7.0)
 
 L’APK è firmato con lo stesso certificato delle versioni precedenti: scegli **Aggiorna** durante l’installazione.
 
