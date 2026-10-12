@@ -1,0 +1,2 @@
+291b1c7faa195a019925383afc54e4cbc9d0156fc4ed1b771113464e9f60881b  Pocket-Mozart-2.7.apk
+7c8caccd8e2cf826f9bdbb62ef3f993e0ac82ce6ab1d53e978c5acad8aa8268c  Pocket-Mozart-2.7-sorgenti.zip
