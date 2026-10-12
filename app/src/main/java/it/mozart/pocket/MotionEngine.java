@@ -8,17 +8,17 @@ import java.io.IOException;
 /** Deterministic idle → walk → idle → action cycle, with persistent facing and musical effects. */
 public final class MotionEngine {
     public enum Pose {
-        IDLE(0,4,2,"Riposo",false), WALK(1,8,8,"Passeggiata",false),
-        SCORE(2,4,3,"Spartito",true), PIANO(3,4,5,"Pianoforte",true),
-        BOW(4,4,2.5f,"Inchino",false), BIRTHDAY(5,4,4,"Compleanno",true),
-        VIOLIN(6,4,5,"Violino",true), CONDUCT(7,4,4,"Direttore",true),
-        FLUTE(8,4,4,"Flauto",true), QUILL(9,4,3.5f,"Composizione",true), HUM(10,4,3,"Canticchia",true),
-        TEA(11,4,2.5f,"Un tè",false), BOOK(12,4,2,"Lettura",false), LETTER(13,4,2.5f,"Lettera",false),
-        WATCH(14,4,2.5f,"Orologio",false), WIG(15,4,3,"Parrucca",false),
-        DANCE(16,4,5,"Minuetto",true), STRETCH(17,4,2.5f,"Si stiracchia",false),
-        YAWN(18,4,2,"Sbadiglio",false), NAP(19,4,1.5f,"Sonnellino",false), WAVE(20,4,4,"Saluto",false),
-        TRICORN(21,4,3,"Tricorno",false), ROSE(22,4,2.5f,"Una rosa",false),
-        MUSIC_BOX(23,4,4,"Carillon",true), TRAVEL(24,4,3,"In viaggio",false), APPLAUSE(25,4,5,"Applauso",true);
+        IDLE(0,4,2,"Idle",false), WALK(1,8,8,"Walking",false),
+        SCORE(2,4,3,"Sheet music",true), PIANO(3,4,5,"Piano",true),
+        BOW(4,4,2.5f,"Bow",false), BIRTHDAY(5,4,4,"Birthday",true),
+        VIOLIN(6,4,5,"Violin",true), CONDUCT(7,4,4,"Conducting",true),
+        FLUTE(8,4,4,"Flute",true), QUILL(9,4,3.5f,"Composing",true), HUM(10,4,3,"Humming",true),
+        TEA(11,4,2.5f,"Tea",false), BOOK(12,4,2,"Reading",false), LETTER(13,4,2.5f,"Letter",false),
+        WATCH(14,4,2.5f,"Pocket watch",false), WIG(15,4,3,"Wig",false),
+        DANCE(16,4,5,"Minuet",true), STRETCH(17,4,2.5f,"Stretching",false),
+        YAWN(18,4,2,"Yawning",false), NAP(19,4,1.5f,"Nap",false), WAVE(20,4,4,"Wave",false),
+        TRICORN(21,4,3,"Tricorn",false), ROSE(22,4,2.5f,"Rose",false),
+        MUSIC_BOX(23,4,4,"Music box",true), TRAVEL(24,4,3,"Travel",false), APPLAUSE(25,4,5,"Applause",true);
         public final int row, frameCount;
         public final float framesPerSecond;
         public final String label;

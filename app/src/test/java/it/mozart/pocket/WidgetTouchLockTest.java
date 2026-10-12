@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = {26, 35})
 public class WidgetTouchLockTest {
-    private static final String LABEL = "Blocca tocchi sul widget";
+    private static final String LABEL = "Lock widget taps";
 
     private static void lock(Context c, boolean value) {
         Prefs.get(c).edit().putBoolean("touchLock", value).apply();

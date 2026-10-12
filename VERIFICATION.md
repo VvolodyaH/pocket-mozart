@@ -1,15 +1,25 @@
-# Verification · Pocket Mozart 2.7.0
+# Verification · Pocket Mozart 2.8.0
 
-Application verification completed on October 12, 2026. Subsequent English documentation edits do not change the APK or application code.
+Application verification completed on October 12, 2026. Version 2.8 translates the app to English while retaining the widget playback and animation assets from 2.7.
 
 ## Results
 
-- `:app:assembleDebug`: APK 2.7.0, version code 10, package `it.mozart.pocket`, minSdk 26 and targetSdk 35. Size: 14,504,588 bytes.
-- `:app:testDebugUnitTest`: **76 tests, no failures, errors, or skipped tests**. This includes 28 JUnit tests and 48 Robolectric cases on API levels 26, 31, and 35.
+- `:app:assembleDebug`: APK 2.8.0, version code 11, package `it.mozart.pocket`, minSdk 26 and targetSdk 35. Size: 14,508,136 bytes.
+- `:app:testDebugUnitTest`: **78 tests, no failures, errors, or skipped tests**. This includes 28 JUnit tests and 50 Robolectric cases on API levels 26, 31, and 35.
 - `:app:lintDebug`: **no errors**, with six existing warnings: three newer Android attributes, one backup rule, and two intentional image duplicates.
-- Signing verified with `apksigner`, matching 2.6 and earlier versions. Certificate SHA-256: `62ef238df8c9a7b830f4cff8c2da1716a91478869eefa399d6950e89f0fe3ba5`.
+- Signing verified with `apksigner`, matching 2.7 and earlier versions. Certificate SHA-256: `62ef238df8c9a7b830f4cff8c2da1716a91478869eefa399d6950e89f0fe3ba5`.
 - The manifest requests no permissions. The `BIND_REMOTEVIEWS` service remains for Android 8–11; Android 12+ uses resident frames.
 - Sprites and atlases are unchanged from 2.6. Native graphics comparisons still cover all 108 frames across 26 poses.
+
+## English interface
+
+All app interface text is in English: the main page, live preview, all 26 activity buttons, status and playback controls, settings, birthday information, placement help, dialog buttons, toasts, and accessibility descriptions. Switch on/off labels are explicitly English. Default English string resources remain English on phones using other languages.
+
+The new `englishInterfaceAndPlacementHelpRemainEnglishOnAnItalianPhone` test runs on API levels 26 and 35 with the phone locale set to Italian. It checks real activity buttons and settings, the size slider and touch-lock accessibility labels, switch states, the inflated widget preview, and placement dialog title, instructions, and buttons. Canceling placement restores the English add button. Existing startup and touch-lock tests now use the English controls.
+
+Compiled APK resources were inspected for the English controls, help, and descriptions and for absence of the previous Italian text. All 288 app project files in the published source match the build workspace. Preference keys, pose ordering, serialized motion state, player fingerprints, and packaged animation images remain unchanged. The source catalogue labels are translated, and the README GIF is retained unchanged.
+
+The playback regression evidence below remains valid for 2.8; the complete suite was rerun after translation.
 
 ## Reproduced cause
 

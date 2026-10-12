@@ -74,20 +74,20 @@ public final class MainActivity extends Activity {
         LinearLayout masthead = Ui.row(this);
         TextView music = Ui.text(this, "♫", 27, Ui.RED);
         masthead.addView(music, new LinearLayout.LayoutParams(dp(40), -2));
-        TextView name = Ui.text(this, "pocket mozart", 20, Ui.INK);
+        TextView name = Ui.text(this, getString(R.string.brand_name), 20, Ui.INK);
         name.setTypeface(Typeface.create("serif", Typeface.BOLD));
         masthead.addView(name, new LinearLayout.LayoutParams(0, -2, 1));
-        TextView status = Ui.text(this, MozartWidgetProvider.ids(this).length == 0 ? "○ Pronto per la Home"
-                : Prefs.enabled(this) ? "● A casa" : "○ In pausa", 11,
+        TextView status = Ui.text(this, getString(MozartWidgetProvider.ids(this).length == 0 ? R.string.status_ready
+                : Prefs.enabled(this) ? R.string.status_home : R.string.status_paused), 11,
                 Prefs.enabled(this) ? Ui.GREEN : Ui.MUTED);
         masthead.addView(status);
         Ui.add(page, masthead, 0);
-        Ui.add(page, Ui.label(this, "IL TUO PICCOLO MAESTRO"), 31);
-        TextView headline = Ui.text(this, "Un po’ di genio.\nSulla tua Home.", 34, Ui.INK);
+        Ui.add(page, Ui.label(this, getString(R.string.intro_label)), 31);
+        TextView headline = Ui.text(this, getString(R.string.intro_title), 34, Ui.INK);
         headline.setTypeface(Typeface.create("serif", Typeface.NORMAL));
         headline.setLineSpacing(dp(1), 1);
         Ui.add(page, headline, 12);
-        Ui.add(page, Ui.text(this, "Passeggia, compone e si prende una pausa.\nUn Mozart in miniatura, con una vita tutta sua.", 14, Ui.MUTED), 13);
+        Ui.add(page, Ui.text(this, getString(R.string.intro_description), 14, Ui.MUTED), 13);
 
         LinearLayout stage = Ui.column(this);
         stage.setPadding(dp(16), dp(15), dp(16), dp(14));
@@ -97,33 +97,33 @@ public final class MainActivity extends Activity {
         stage.setBackground(stageBackground);
         LinearLayout stageLabel = Ui.row(this);
         stageLabel.addView(Ui.text(this, "●", 9, Ui.GREEN), new LinearLayout.LayoutParams(dp(17), -2));
-        stageLabel.addView(Ui.label(this, "ANTEPRIMA DAL VIVO"), new LinearLayout.LayoutParams(0, -2, 1));
-        stageLabel.addView(Ui.text(this, "pixel art", 10, Ui.MUTED));
+        stageLabel.addView(Ui.label(this, getString(R.string.preview_label)), new LinearLayout.LayoutParams(0, -2, 1));
+        stageLabel.addView(Ui.text(this, getString(R.string.preview_style), 10, Ui.MUTED));
         stage.addView(stageLabel);
         preview = new PetSceneView(this);
         preview.setPreview(true);
         stage.addView(preview, new LinearLayout.LayoutParams(-1, dp(195)));
-        TextView stageCaption = Ui.text(this, "La tua Home è il suo piccolo palcoscenico.", 11, Ui.MUTED);
+        TextView stageCaption = Ui.text(this, getString(R.string.preview_caption), 11, Ui.MUTED);
         stageCaption.setGravity(Gravity.CENTER);
         stage.addView(stageCaption);
         Ui.add(page, stage, 24);
 
         boolean hasWidget = MozartWidgetProvider.ids(this).length > 0;
-        Button primary = Ui.button(this, !hasWidget ? "＋  Aggiungi Mozart alla Home"
-                : Prefs.enabled(this) ? "Metti Mozart in pausa" : "Riprendi Mozart", true);
+        Button primary = Ui.button(this, getString(!hasWidget ? R.string.add_widget
+                : Prefs.enabled(this) ? R.string.pause_mozart : R.string.resume_mozart), true);
         primary.setOnClickListener(v -> toggle());
         Ui.add(page, primary, 19);
-        Ui.add(page, Ui.text(this, "Trascina i bordi del widget sulla Home: il suo spazio si adatta da solo.", 12, Ui.MUTED), 10);
+        Ui.add(page, Ui.text(this, getString(R.string.resize_hint), 12, Ui.MUTED), 10);
         if (hasWidget) {
-            Button widget = Ui.button(this, "＋  Aggiungi un altro widget", false);
+            Button widget = Ui.button(this, getString(R.string.add_another_widget), false);
             widget.setOnClickListener(v -> addWidget());
             Ui.add(page, widget, 10);
         }
-        settingSwitch(page, "Blocca tocchi sul widget",
-                "Evita aperture involontarie. Per le impostazioni, usa l’icona dell’app.", "touchLock", false);
+        settingSwitch(page, getString(R.string.touch_lock_title),
+                getString(R.string.touch_lock_description), "touchLock", false);
 
-        Ui.add(page, Ui.label(this, "26 PICCOLE ABITUDINI"), 30);
-        Ui.add(page, Ui.text(this, "Scegli il prossimo gesto: partirà dopo passeggiata e pausa.", 12, Ui.MUTED), 9);
+        Ui.add(page, Ui.label(this, getString(R.string.activities_label)), 30);
+        Ui.add(page, Ui.text(this, getString(R.string.activities_hint), 12, Ui.MUTED), 9);
         MotionEngine.Pose[] poses = MotionEngine.Pose.values();
         for (int row = 0; row < (poses.length + 2) / 3; row++) {
             LinearLayout chips = Ui.row(this);
@@ -144,11 +144,11 @@ public final class MainActivity extends Activity {
         }
 
         LinearLayout settings = Ui.card(this);
-        settings.addView(Ui.text(this, "A modo tuo", 18, Ui.INK));
+        settings.addView(Ui.text(this, getString(R.string.settings_title), 18, Ui.INK));
         sizeLabel = Ui.text(this, getString(R.string.size_label, Prefs.size(this)), 13, Ui.INK);
         Ui.add(settings, sizeLabel, 19);
         SeekBar size = new SeekBar(this); size.setMax(96); size.setProgress(Prefs.size(this) - 64);
-        size.setContentDescription("Dimensione di Mozart");
+        size.setContentDescription(getString(R.string.size_description));
         size.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean user) {
                 if (!user) return;
@@ -159,10 +159,10 @@ public final class MainActivity extends Activity {
             @Override public void onStopTrackingTouch(SeekBar seekBar) { }
         });
         Ui.add(settings, size, 8);
-        Ui.add(settings, Ui.text(this, "Si adatta anche alle aree più piccole.", 11, Ui.MUTED), 3);
-        Ui.add(settings, Ui.text(this, "Il suo ritmo", 13, Ui.INK), 21);
+        Ui.add(settings, Ui.text(this, getString(R.string.size_hint), 11, Ui.MUTED), 3);
+        Ui.add(settings, Ui.text(this, getString(R.string.tempo_title), 13, Ui.INK), 21);
         LinearLayout tempos = Ui.row(this);
-        String[] tempoNames = {"Tranquillo", "Naturale", "Vivace"};
+        String[] tempoNames = {getString(R.string.tempo_calm), getString(R.string.tempo_natural), getString(R.string.tempo_lively)};
         for (int i = 0; i < 3; i++) {
             final int selected = i;
             Button b = Ui.button(this, tempoNames[i], Prefs.tempo(this) == i);
@@ -180,20 +180,20 @@ public final class MainActivity extends Activity {
             });
         }
         Ui.add(settings, tempos, 10);
-        settingSwitch(settings, "Date speciali", "Cappellino il 27 gennaio e omaggi alle sue opere.", "dates", true);
-        settingSwitch(settings, "Risparmio energia", "8 fotogrammi/s nel widget; 12 disattivandolo.", "eco", true);
-        settingSwitch(settings, "Mostra i confini", "Un bordo discreto intorno al suo spazio.", "border", false);
+        settingSwitch(settings, getString(R.string.dates_title), getString(R.string.dates_description), "dates", true);
+        settingSwitch(settings, getString(R.string.eco_title), getString(R.string.eco_description), "eco", true);
+        settingSwitch(settings, getString(R.string.border_title), getString(R.string.border_description), "border", false);
         Ui.add(page, settings, 18);
 
         LinearLayout birthday = Ui.card(this);
-        birthday.addView(Ui.label(this, "27 GENNAIO · BUON COMPLEANNO, WOLFGANG"));
-        TextView partyTitle = Ui.text(this, "Anche i geni fanno festa.", 21, Ui.INK);
+        birthday.addView(Ui.label(this, getString(R.string.birthday_label)));
+        TextView partyTitle = Ui.text(this, getString(R.string.birthday_title), 21, Ui.INK);
         partyTitle.setTypeface(Typeface.create("serif", Typeface.NORMAL));
         Ui.add(birthday, partyTitle, 11);
-        Ui.add(birthday, Ui.text(this, "Nel giorno del suo compleanno compare un cappellino e Mozart festeggia da solo. Puoi provarlo qui sopra, quando vuoi.", 12, Ui.MUTED), 9);
+        Ui.add(birthday, Ui.text(this, getString(R.string.birthday_description), 12, Ui.MUTED), 9);
         Ui.add(page, birthday, 18);
 
-        TextView footer = Ui.text(this, "Fatto di pixel, musica e piccole pause.\nTutto sul tuo telefono · nessun account", 11, Ui.MUTED);
+        TextView footer = Ui.text(this, getString(R.string.footer), 11, Ui.MUTED);
         footer.setGravity(Gravity.CENTER);
         Ui.add(page, footer, 25);
         scroll.post(() -> scroll.scrollTo(0, savedScroll));
@@ -208,6 +208,8 @@ public final class MainActivity extends Activity {
         row.addView(words, p);
         Switch toggle = new Switch(this);
         toggle.setContentDescription(title);
+        toggle.setTextOn(getString(R.string.switch_on));
+        toggle.setTextOff(getString(R.string.switch_off));
         toggle.setChecked(Prefs.get(this).getBoolean(key, fallback));
         toggle.setOnCheckedChangeListener((buttonView, checked) -> {
             Prefs.get(this).edit().putBoolean(key, checked).apply(); refresh();
@@ -229,12 +231,12 @@ public final class MainActivity extends Activity {
         if (manager.isRequestPinAppWidgetSupported()) {
             if (!MozartWidgetProvider.requestPin(this)) {
                 cancelEmptyWidgetRequest();
-                Toast.makeText(this, "Aggiungi Pocket Mozart dal menu Widget della Home.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.add_widget_hint, Toast.LENGTH_LONG).show();
             }
-        } else new AlertDialog.Builder(this).setTitle("Aggiungi Pocket Mozart")
-                .setMessage("Sulla Home, tieni premuto uno spazio libero e scegli Widget → Pocket Mozart. Trascinalo dove vuoi e adatta i bordi: Mozart si avvia da solo.")
-                .setPositiveButton("Vai alla Home", (d, w) -> goHome())
-                .setNegativeButton("Annulla", (d, w) -> cancelEmptyWidgetRequest())
+        } else new AlertDialog.Builder(this).setTitle(R.string.add_widget_title)
+                .setMessage(R.string.add_widget_instructions)
+                .setPositiveButton(R.string.go_home, (d, w) -> goHome())
+                .setNegativeButton(R.string.cancel, (d, w) -> cancelEmptyWidgetRequest())
                 .setOnCancelListener(d -> cancelEmptyWidgetRequest()).show();
     }
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.8.0
+
+- Translated the entire app interface to English: introductory text, live preview, status, add/pause/resume controls, touch locking, settings, birthday information, placement instructions, dialog buttons, and toasts.
+- Translated all 26 activity names, widget picker descriptions, control accessibility labels, and switch on/off states. English remains the app language on phones using another language.
+- Moved interface copy into English Android string resources; translated sprite-loader diagnostics and the source catalogue labels.
+- Added an Italian-phone locale regression on API levels 26 and 35 covering visible controls, activity names, accessibility descriptions, switch states, the widget preview, and placement help.
+- Preserved animation playback, assets, touch locking, stored preferences, package name, and signing certificate. Version code 11 allows updating an existing installation.
+- Published the English APK and complete source ZIP, with the animation showcase retained on the project homepage.
+
 ## 2.7.0
 
 - On Android 12+, playback is fully resident. Removed the asynchronous frame request that could show a transparent loading view when returning to the home screen, even without the unnecessary cache update fixed earlier.

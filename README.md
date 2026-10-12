@@ -1,10 +1,12 @@
-# Pocket Mozart 2.7
+# Pocket Mozart 2.8
 
 A little Mozart companion for Android.
 
-[Download APK 2.7](https://github.com/VvolodyaH/pocket-mozart/raw/refs/heads/main/downloads/Pocket-Mozart-2.7.apk) · [Download the complete source ZIP](https://github.com/VvolodyaH/pocket-mozart/raw/refs/heads/main/downloads/Pocket-Mozart-2.7-source.zip) · [Release notes](https://github.com/VvolodyaH/pocket-mozart/releases/tag/v2.7.0) · [Verification report](VERIFICATION.md)
+[Download APK 2.8](https://github.com/VvolodyaH/pocket-mozart/raw/refs/heads/main/downloads/Pocket-Mozart-2.8.apk) · [Download the complete source ZIP](https://github.com/VvolodyaH/pocket-mozart/raw/refs/heads/main/downloads/Pocket-Mozart-2.8-source.zip) · [Release notes](https://github.com/VvolodyaH/pocket-mozart/releases/tag/v2.8.0) · [Verification report](VERIFICATION.md)
 
 The APK uses the same signing certificate as earlier versions. Choose **Update** when installing over an existing copy.
+
+**The app is now entirely in English**, including settings, all 26 activity names, placement help, and accessibility descriptions. It stays in English even when the phone uses another language. Your existing widget and saved settings are preserved when updating.
 
 Pocket Mozart is a native, transparent, resizable Android home screen widget featuring a chubby pixel-art Mozart. It includes 26 activities: walking, playing instruments, composing, reading, enjoying tea, and taking little breaks. Twenty additional animation sets provide 80 dedicated frames, with musical notes appearing occasionally. The launcher draws the character inside the widget's own area.
 
@@ -18,11 +20,11 @@ The top panel shows the widget's movement cycle; the tiles cycle through all act
 
 Requires Android 8.0 or later. The downloadable APK is a signed development build that you can install directly.
 
-1. Install `Pocket-Mozart-2.7.apk`. To replace an earlier version, including 2.6, choose **Update**. The package name and signing certificate are unchanged.
-2. Open **Pocket Mozart**, tap the button to add Mozart to the home screen, and confirm placement in your launcher.
+1. Install `Pocket-Mozart-2.8.apk`. To replace an earlier version, including 2.7, choose **Update**. The package name and signing certificate are unchanged.
+2. Open **Pocket Mozart**, tap **Add Mozart to home**, and confirm placement in your launcher.
 3. Place the widget and resize its edges on the home screen. Mozart starts automatically.
 
-To prevent accidental app launches, enable the touch-lock toggle directly below the add/pause buttons. Tapping Mozart or the transparent widget area will no longer open the app; animation continues. The setting applies immediately to all placed widgets and is saved. Use the app icon to change settings or unlock touches. Touch locking is off by default.
+To prevent accidental app launches, enable **Lock widget taps** directly below the add/pause buttons. Tapping Mozart or the transparent widget area will no longer open the app; animation continues. The setting applies immediately to all placed widgets and is saved. Use the app icon to change settings or unlock touches. Touch locking is off by default.
 
 No accessibility, overlay, or notification permissions are required. The accessibility service from the original overlay version has been removed. There is no mandatory configuration screen or separate area editor.
 
@@ -65,7 +67,7 @@ Historical references: [Mozarteum Foundation](https://mozarteum.at/en/wolfgang-a
 
 ## How random sequences work
 
-On **Android 12 and later**, version 2.7 prepares the complete playback sequence inside the launcher. It no longer requests the next frame from a service while you return to the widget's home screen page. That request could display an empty loading view even after the version 2.5 fix.
+On **Android 12 and later**, the app prepares the complete playback sequence inside the launcher, as introduced in version 2.7. It no longer requests the next frame from a service while you return to the widget's home screen page. That request could display an empty loading view even after the version 2.5 fix.
 
 `ResidentTimeline` prepares random paths and activities using the same `MotionEngine`. The final walk returns Mozart to his starting position, followed by idle and an activity. Playback then wraps to the opening idle. Position, facing direction, and breathing remain consistent at the boundary. Musical notes finish before the wrap, and the character remains fully opaque. Very large areas limit the route to a distance that can be covered within the available time.
 
