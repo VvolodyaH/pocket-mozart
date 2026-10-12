@@ -6,7 +6,7 @@ import javax.imageio.ImageIO;
 public class PreviewCatalog {
  public static void main(String[] args) throws Exception {
   Path root=Path.of(args.length==0?".":args[0]);
-  String[] names={"Riposo","Passeggiata","Spartito","Pianoforte","Inchino","Compleanno","Violino","Direttore","Flauto","Composizione","Canticchia","Un tè","Lettura","Lettera","Orologio","Parrucca","Minuetto","Si stiracchia","Sbadiglio","Sonnellino","Saluto","Tricorno","Una rosa","Carillon","In viaggio","Applauso"};
+  String[] names={"Idle","Walking","Sheet music","Piano","Bow","Birthday","Violin","Conducting","Flute","Composing","Humming","Tea","Reading","Letter","Pocket watch","Wig","Minuet","Stretching","Yawning","Nap","Wave","Tricorn","Rose","Music box","Travel","Applause"};
   BufferedImage base=ImageIO.read(root.resolve("app/src/main/assets/sprites/mozart.png").toFile());
   BufferedImage walk=ImageIO.read(root.resolve("app/src/main/assets/sprites/mozart-walk.png").toFile());
   BufferedImage extra=ImageIO.read(root.resolve("art/mozart-extra.png").toFile());

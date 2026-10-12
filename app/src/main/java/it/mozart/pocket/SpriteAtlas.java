@@ -30,8 +30,8 @@ final class SpriteAtlas {
             options.inScaled = false;
             bitmap = BitmapFactory.decodeStream(input, null, options);
             if (bitmap == null || bitmap.getWidth() % 4 != 0 || bitmap.getHeight() % 6 != 0)
-                throw new IllegalStateException("Atlante Mozart non valido");
-        } catch (IOException e) { throw new IllegalStateException("Sprite di Mozart mancanti", e); }
+                throw new IllegalStateException("Invalid Mozart sprite atlas");
+        } catch (IOException e) { throw new IllegalStateException("Missing Mozart sprites", e); }
         cellWidth = bitmap.getWidth() / 4;
         cellHeight = bitmap.getHeight() / 6;
         try (java.io.InputStream input = c.getAssets().open("sprites/mozart-walk.png")) {
@@ -39,15 +39,15 @@ final class SpriteAtlas {
             options.inScaled = false;
             walkBitmap = BitmapFactory.decodeStream(input, null, options);
             if (walkBitmap == null || walkBitmap.getWidth() != cellWidth * 4 || walkBitmap.getHeight() != cellHeight * 2)
-                throw new IllegalStateException("Camminata Mozart non valida");
-        } catch (IOException e) { throw new IllegalStateException("Fotogrammi della camminata mancanti", e); }
+                throw new IllegalStateException("Invalid Mozart walking atlas");
+        } catch (IOException e) { throw new IllegalStateException("Missing walking frames", e); }
         for (int i = 0; i < extras.length; i++) {
             try (java.io.InputStream input = c.getAssets().open("sprites/mozart-extra-" + i + ".png")) {
                 BitmapFactory.Options options = new BitmapFactory.Options(); options.inScaled = false;
                 extras[i] = BitmapFactory.decodeStream(input, null, options);
                 if (extras[i] == null || extras[i].getWidth() != cellWidth * 4 || extras[i].getHeight() != cellHeight * 5)
-                    throw new IllegalStateException("Nuove animazioni Mozart non valide");
-            } catch (IOException e) { throw new IllegalStateException("Nuove animazioni Mozart mancanti", e); }
+                    throw new IllegalStateException("Invalid additional Mozart animations");
+            } catch (IOException e) { throw new IllegalStateException("Missing additional Mozart animations", e); }
         }
         paint.setFilterBitmap(false);
         paint.setAntiAlias(false);

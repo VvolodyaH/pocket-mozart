@@ -7,6 +7,9 @@ import android.content.pm.PackageManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.Switch;
+import android.widget.TextView;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -39,13 +42,13 @@ public class AndroidStartupTest {
         try (ActivityController<MainActivity> controller = Robolectric.buildActivity(MainActivity.class).setup().visible()) {
             MainActivity activity = controller.get();
             Shadows.shadowOf(AppWidgetManager.getInstance(activity)).setRequestPinAppWidgetSupported(true);
-            findButton(activity.findViewById(android.R.id.content), "＋  Aggiungi Mozart alla Home").performClick();
+            findButton(activity.findViewById(android.R.id.content), "＋ Add Mozart to home").performClick();
             assertEquals(1, MozartWidgetProvider.ids(activity).length);
             assertTrue(Prefs.enabled(activity));
             assertNull(Shadows.shadowOf(activity.getApplication()).getNextStartedService());
             assertNull(Shadows.shadowOf(activity).getNextStartedActivity());
             controller.pause().resume();
-            assertNotNull(findButton(activity.findViewById(android.R.id.content), "Metti Mozart in pausa"));
+            assertNotNull(findButton(activity.findViewById(android.R.id.content), "Pause Mozart"));
             Intent home = Shadows.shadowOf(activity).getNextStartedActivity();
             assertEquals(Intent.ACTION_MAIN, home.getAction());
             assertTrue(home.hasCategory(Intent.CATEGORY_HOME));
@@ -56,13 +59,44 @@ public class AndroidStartupTest {
         try (ActivityController<MainActivity> controller = Robolectric.buildActivity(MainActivity.class).setup().visible()) {
             MainActivity activity = controller.get();
             Shadows.shadowOf(AppWidgetManager.getInstance(activity)).setRequestPinAppWidgetSupported(false);
-            findButton(activity.findViewById(android.R.id.content), "＋  Aggiungi Mozart alla Home").performClick();
+            findButton(activity.findViewById(android.R.id.content), "＋ Add Mozart to home").performClick();
             AlertDialog dialog = ShadowAlertDialog.getLatestAlertDialog();
             assertNotNull(dialog);
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).performClick();
             assertEquals(0, MozartWidgetProvider.ids(activity).length);
-            assertNotNull(findButton(activity.findViewById(android.R.id.content), "＋  Aggiungi Mozart alla Home"));
+            assertNotNull(findButton(activity.findViewById(android.R.id.content), "＋ Add Mozart to home"));
             assertNull(Shadows.shadowOf(activity.getApplication()).getNextStartedService());
+        }
+    }
+
+    @Test @Config(qualifiers = "it-rIT")
+    public void englishInterfaceAndPlacementHelpRemainEnglishOnAnItalianPhone() {
+        try (ActivityController<MainActivity> controller = Robolectric.buildActivity(MainActivity.class).setup().visible()) {
+            MainActivity activity = controller.get();
+            assertEquals("it", activity.getResources().getConfiguration().getLocales().get(0).getLanguage());
+            View root = activity.findViewById(android.R.id.content);
+            assertNotNull(findButton(root, "Sheet music"));
+            assertNotNull(findButton(root, "Pocket watch"));
+            assertNotNull(findButton(root, "Birthday"));
+            assertNotNull(findText(root, "LIVE PREVIEW"));
+            assertNotNull(findText(root, "Special dates"));
+            assertEquals("Mozart’s size", find(root, SeekBar.class).getContentDescription());
+            Switch lock = find(root, Switch.class);
+            assertEquals("Lock widget taps", lock.getContentDescription());
+            assertEquals("On", lock.getTextOn());
+            assertEquals("Off", lock.getTextOff());
+            View widgetPreview = activity.getLayoutInflater().inflate(R.layout.mozart_widget_preview, null);
+            assertEquals("Mozart’s movement area", widgetPreview.getContentDescription());
+
+            Shadows.shadowOf(AppWidgetManager.getInstance(activity)).setRequestPinAppWidgetSupported(false);
+            findButton(root, "＋ Add Mozart to home").performClick();
+            AlertDialog dialog = ShadowAlertDialog.getLatestAlertDialog();
+            assertEquals("Add Pocket Mozart", Shadows.shadowOf(dialog).getTitle());
+            assertTrue(Shadows.shadowOf(dialog).getMessage().toString().contains("Widgets → Pocket Mozart"));
+            assertEquals("Go to home screen", dialog.getButton(AlertDialog.BUTTON_POSITIVE).getText());
+            assertEquals("Cancel", dialog.getButton(AlertDialog.BUTTON_NEGATIVE).getText());
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).performClick();
+            assertNotNull(findButton(activity.findViewById(android.R.id.content), "＋ Add Mozart to home"));
         }
     }
 
@@ -93,6 +127,14 @@ public class AndroidStartupTest {
         if (root instanceof Button b && b.getText().toString().equals(text)) return b;
         if (root instanceof ViewGroup group) for (int i = 0; i < group.getChildCount(); i++) {
             Button result = findButton(group.getChildAt(i), text);
+            if (result != null) return result;
+        }
+        return null;
+    }
+    private static TextView findText(View root, String text) {
+        if (root instanceof TextView t && t.getText().toString().equals(text)) return t;
+        if (root instanceof ViewGroup group) for (int i = 0; i < group.getChildCount(); i++) {
+            TextView result = findText(group.getChildAt(i), text);
             if (result != null) return result;
         }
         return null;

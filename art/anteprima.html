@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="it">
+<html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pocket Mozart · anteprima animata</title>
+<title>Pocket Mozart · animated preview</title>
 <style>
 :root{color-scheme:light;--red:#ae373c;--ink:#302b36;--muted:#847d83}
 *{box-sizing:border-box}body{margin:0;background:#f8f4ef;color:var(--ink);font:15px/1.55 system-ui,sans-serif}
@@ -19,20 +19,20 @@ button{font:inherit;font-size:12px;background:#f2e7e3;color:var(--red);border:0;
 </style>
 <main>
 <header><span aria-hidden="true">♫</span><b>pocket mozart</b></header>
-<div class="eyebrow">ANTEPRIMA DELLE ANIMAZIONI</div>
-<h1>Un piccolo maestro.<br>Una vita tutta sua.</h1>
-<p>26 attività e notine musicali. In pausa respira con il busto che sale e scende e i piedi fermi. Scegli un’animazione o lascia che Mozart ti sorprenda.</p>
+<div class="eyebrow">ANIMATION PREVIEW</div>
+<h1>A tiny composer.<br>A life of his own.</h1>
+<p>26 activities and little musical notes. While resting, his torso rises and falls as he breathes, with his feet staying still. Choose an animation or let Mozart surprise you.</p>
 <section class="card">
-<div class="stage"><div class="area" id="area"><canvas id="canvas" aria-label="Mozart animato su sfondo trasparente"></canvas></div></div>
-<p class="hint">Trascina l’angolo in basso a destra per adattare il suo spazio.</p>
+<div class="stage"><div class="area" id="area"><canvas id="canvas" aria-label="Animated Mozart on a transparent background"></canvas></div></div>
+<p class="hint">Drag the bottom-right corner to resize his space.</p>
 <div class="buttons" id="buttons"></div>
-<div class="control"><label for="auto">Movimento autonomo</label><input id="auto" type="checkbox" checked></div>
-<div class="control"><label for="size">Dimensione di Mozart</label><input id="size" type="range" min="64" max="160" value="115"></div>
-<div class="control"><label for="tempo">Il suo ritmo</label><select id="tempo"><option value="0.65">Tranquillo</option><option value="1" selected>Naturale</option><option value="1.5">Vivace</option></select></div>
-<div class="control"><label for="party">Simula il 27 gennaio</label><input id="party" type="checkbox"></div>
+<div class="control"><label for="auto">Autonomous movement</label><input id="auto" type="checkbox" checked></div>
+<div class="control"><label for="size">Mozart size</label><input id="size" type="range" min="64" max="160" value="115"></div>
+<div class="control"><label for="tempo">His pace</label><select id="tempo"><option value="0.65">Calm</option><option value="1" selected>Natural</option><option value="1.5">Lively</option></select></div>
+<div class="control"><label for="party">Simulate January 27</label><input id="party" type="checkbox"></div>
 </section>
-<p class="note">Nell’app premi “Aggiungi Mozart alla Home”. Lo spazio si regola con i bordi del widget direttamente nel launcher. La versione 2.4 segue il ciclo riposo → passeggiata → riposo → attività casuale. I cambi sono immediati e tutte le pose si specchiano quando Mozart va a sinistra. Qui puoi provare gli stessi sprite inclusi nell’APK; il lettore del widget va provato su Android.</p>
-<div class="footer">Fatto di pixel, musica e piccole pause.</div>
+<p class="note">Add Mozart to the home screen from the app, then resize the widget using its edges in your launcher. Version 2.7 follows idle → walk → idle → random activity, with immediate transitions and mirrored poses when walking left. On Android 12+, the widget uses a finite sequence that repeats and changes daily. This browser preview shows the same sprites included in the APK; test widget playback on an Android device.</p>
+<div class="footer">Made of pixels, music, and little breaks.</div>
 </main>
 <script>
 const atlas=new Image(),walk=new Image(),extra=new Image();
@@ -41,7 +41,7 @@ const notes=[{"width": 16, "height": 24, "paths": [{"color": "#4C303D", "d": "M1
 notes.forEach(n=>n.paths.forEach(p=>p.path=new Path2D(p.d)));
 const canvas=document.querySelector('#canvas'),ctx=canvas.getContext('2d'),area=document.querySelector('#area');
 const auto=document.querySelector('#auto'),party=document.querySelector('#party'),sizeControl=document.querySelector('#size');
-const labels=['Riposo','Passeggiata','Spartito','Pianoforte','Inchino','Compleanno','Violino','Direttore','Flauto','Composizione','Canticchia','Un tè','Lettura','Lettera','Orologio','Parrucca','Minuetto','Si stiracchia','Sbadiglio','Sonnellino','Saluto','Tricorno','Una rosa','Carillon','In viaggio','Applauso'];
+const labels=['Idle','Walking','Sheet music','Piano','Bow','Birthday','Violin','Conducting','Flute','Composing','Humming','Tea','Reading','Letter','Watch','Wig','Minuet','Stretching','Yawning','Napping','Waving','Tricorn','Rose','Music box','Travel','Applause'];
 const fps=[2,8,3,5,2.5,4,5,4,4,3.5,3,2.5,2,2.5,2.5,3,5,2.5,2,1.5,4,3,2.5,4,3,5];
 let w=1,h=1,s=1,x=0,y=0,tx=0,ty=0,row=0,t=0,remaining=3,last=0,initialized=false,left=false,partyIn=0,walkPhase=0;
 let phase=0,queued=-1,walkRequested=false,idlePreview=0,inPlace=false,noteAge=-1,noteDelay=5,noteKind=0,noteLeft=false;
