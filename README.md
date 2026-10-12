@@ -8,6 +8,12 @@ The APK uses the same signing certificate as earlier versions. Choose **Update**
 
 Pocket Mozart is a native, transparent, resizable Android home screen widget featuring a chubby pixel-art Mozart. It includes 26 activities: walking, playing instruments, composing, reading, enjoying tea, and taking little breaks. Twenty additional animation sets provide 80 dedicated frames, with musical notes appearing occasionally. The launcher draws the character inside the widget's own area.
 
+## Animation preview
+
+<img src="art/mozart-preview.gif" alt="Animated Mozart showcase with breathing, walking in both directions, musical notes, instruments, and birthday celebrations" width="640">
+
+The top panel shows the widget's movement cycle; the tiles cycle through all activity animations. The preview panels provide contrast, while the Android widget has a transparent background.
+
 ## Installation and placement
 
 Requires Android 8.0 or later. The downloadable APK is a signed development build that you can install directly.
@@ -95,6 +101,7 @@ The APK is generated at `app/build/outputs/apk/debug/app-debug.apk`. Configure `
 - `art/mozart-extra.png`: complete atlas of the 80 additional frames, for export and preview.
 - `art/catalogo.png`: a visual catalogue of all 26 activities.
 - `art/reference.jpg` and `art/mozart*-generated.png`: reference and generated images before import.
+- `art/mozart-preview.gif`: a 24-second looping showcase of all 26 animations, rendered from the app sprites and motion engine.
 - `art/anteprima.html`: offline browser sprite preview. It supports pose and size controls but does not simulate the Android service, launcher cache, or resident sequence.
 - `ResidentTimeline.java`, `MotionEngine.java`, `WidgetTimeline.java`, and `WidgetClipStore.java`: motion, numbered frames, dates, bounded caching, and checkpoints.
 - `NativeWidgetRenderer.java`, `PixelSprites.java`, and `WidgetFramesService.java`: native frame construction and delivery.
@@ -111,6 +118,12 @@ python3 tools/make_preview.py
 ```
 
 The importers `CompileSprites.java`, `CompileWalkSprites.java`, and `CompileExtraSprites.java` preserve the original generated-image preparation process. After import, `BakeSpriteFixes.java` builds the breathing frames from original pixels and applies only the transparent repair area for the violin. The rig fixes foot pixels in place and moves the upper body using nearest-neighbor sampling. `CompileExtraSprites.java` also reapplies the patch, preventing reimport from restoring the fragment. `art/mozart-idle-reference.png`, the original affected frames, and the generated repair image make the changes inspectable.
+
+To regenerate the README GIF, install JDK 17, FFmpeg, Chromium, and the Python `playwright` package, then run:
+
+```bash
+python3 tools/make_readme_gif.py
+```
 
 ## Verification
 
